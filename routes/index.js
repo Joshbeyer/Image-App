@@ -1,20 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-var homeController = require('../controllers').homeController;
+var homeRoutes = require('./home');
+var userRoutes = require('./user');
+var api = require('../api');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-
-  homeController.get()
-  .then(function(dara){
-    res.send('ayyyy');
-  })
-  .catch(function(err){
-    console.log(err);
-  })
- 
-
-});
+router.use(homeRoutes);
+router.use('/user', userRoutes);
+router.use('/api', api);
 
 module.exports = router;
