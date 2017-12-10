@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+console.log('freddie');
 var app = express();
 console.log('Fat Kids are hard to kidnap..');
 // view engine setup
