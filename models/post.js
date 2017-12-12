@@ -12,7 +12,7 @@ var PostSchema = new Schema({
   description: String,
   views: Number,
   hearts: Number
-});
+},{ collection : 'posts'});
 
 
 // Create Model
