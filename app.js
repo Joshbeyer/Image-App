@@ -1,3 +1,5 @@
+// import { request } from 'http';  //Had to comment this out because it causes an error and idk what it is exactly
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -5,11 +7,33 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-
-
-
 var app = express();
 var routes = require('./routes');
+
+
+// Requirements for User Auth;
+var passport = require('passport');
+var flash = require('connect-flash');
+var morgan = require('morgan');
+var session = require('express-session');
+var configDB = require('./utils/db')
+var mongoose = require('mongoose');
+
+// Configuration ================
+mongoose.connect(configDB.url);
+
+require('./utils/passport')(passport); // pass passport for configuration
+
+// setup
+app.use(morgan('dev'));
+
+// required for passport
+app.use(session({ secret: 'plsnofindme' }));
+app.use(passport.initialize());
+app.use(passport.session()); // persistant login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+// END AUTH stuff ===========
 
 
 // view engine setup

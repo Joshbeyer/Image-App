@@ -1,8 +1,8 @@
-const db = require('./db');
+var db = require('./db');
 // require mongodb
 
 // Local modules
-const Post = require('../models/post');
+var Post = require('../models/post');
 
 // Create Posting
 var posting = new Post({

@@ -1,25 +1,7 @@
-// require mongodb
-// const mongoose = require("mongoose");
+var mongoose = require('mongoose');
 
 // Local modules
-const Post = require('../models/post');
-
-// Connect to db
-// const db = mongoose.connect('mongodb://josh:josh@ds163020.mlab.com:63020/imgup');
-
-// // Create Posting
-// var posting = new Post({
-//   postTitle: `Testing Title`,
-//   description: `Testing Post`,
-//   views: 0,
-//   hearts: 0
-// });
-
-// // Save to db
-// posting.save();
-
-
-var mongoose = require('mongoose');
+var Post = require('../models/post');
 
 
 var dbUrl = 'mongodb://josh:josh@ds163020.mlab.com:63020/imgup';
