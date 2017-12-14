@@ -5,6 +5,30 @@ var postsController = require('../controllers/').postsController;
 // get posts or get certain posts
 router.get('/posts',function(req, res){
 
+
+    // var search = JSON.parse(req.query.search) || null;
+    var limit = req.query.limit || null;
+    var page = req.query.page || null; 
+    if(req.query.search){
+       var search = {
+            postTitle : {
+                '$regex' : JSON.parse(req.query.search).postTitle
+            }
+        }     
+    } else {
+        var search = null;
+    }
+    
+
+    console.log(search);
+
+    postsController.find(search, limit, page)
+      .then(function(posts){
+            res.json({posts : posts});
+      })
+      .catch(function(err){
+            res.json({posts : []})
+      })
 })
 
 // create post

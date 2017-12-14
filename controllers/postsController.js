@@ -3,15 +3,22 @@ var Posts = require('../models/post');
 
 
 module.exports = {
-    find : function(params){
+    find : function(params, limit, page){
+        var pageOptions = {
+            page: page || 0,
+            limit: limit > 120 ? limit = 120 : 12
+        }
         return new Promise(function(resolve, reject){
-            Posts.find(params, function(err, posts){
-                if(err){
+            Posts.find(params)
+                 .skip(pageOptions.page*pageOptions.limit)
+                 .limit(pageOptions.limit)
+                 .exec(function(err, posts){
+                 if(err){
                     reject(err);
-                }
-                else{
+                 }
+                 else{
                     resolve(posts);
-                }
+                 }
             });
         });
     },

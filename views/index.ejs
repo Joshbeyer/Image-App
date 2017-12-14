@@ -12,7 +12,48 @@
       <a href="/user/signup" class="btn btn-default">
         <span class="fa fa-user"></span> Signup</a>
     </div>
+    
 
+    <!-- test get posts -->
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="well">
+              <h3>Render initial 12 posts</h3>
+            
+              <div class="row posts-list">
+                  <% posts.forEach(function(post){ %>
+                    <div class="card col-sm-3" style="margin-bottom: 20px;">
+                        <img class="card-img-top" src="https://placeimg.com/640/480/any" style="max-width: 100%;" alt="Card image cap">
+                        <div class="card-body">
+                          <h4 class="card-title"><%= post.postTitle %></h4>
+                          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                          <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                  <% }); %>
+              </div>
+              <div class="row" style="margin-top: 20px; margin-bottom: 20px;">
+                <div class="col-sm-12 text-center" style="">
+                  <button id="getMorePosts" class="btn btn-danger">More Posts</button>
+
+                    <script type="text/html" id="post-template">
+                        <div class="card col-sm-3" style="margin-bottom: 20px;">
+                            <img class="card-img-top" src="https://placeimg.com/640/480/any" style="max-width: 100%;" alt="Card image cap">
+                            <div class="card-body">
+                              <h4 class="card-title" data-content="postTitle"></h4>
+                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                              <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </script>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- test create post -->
     <div class="row">
       <div class="col-sm-12">
           <div class="well">
@@ -33,6 +74,37 @@
             </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="well">
+              <h3>Search posts title</h3>
+              <p>hint : search for "test".</p>
+          
+              <form action="/" class="post-search-form">
+                  
+                  <input type="hidden" name="_csrf", value="<%= _csrf %>">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="post-title" placeholder="Post Title" name="postTitle">
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary mt-4">Search</button>
+                  </div>
+              
+              </form>
+
+              <div class="row search-posts-results">
+               
+              </div>
+  
+          </div>
+      </div>
+    </div>
+    
+
+
+
+
 
   </div>
 <% include ./partials/footer %>

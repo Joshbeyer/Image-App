@@ -2,11 +2,12 @@ $(document).ready(function() {
    
     // run functions on init;
     postCreator();
-    // handle creation of new posts
+    searchPosts();
+
+    // atatch csrf token for requeusts;
     var csrf_token = $('meta[name="_csrf"]').attr('content');
     axios.defaults.headers.common['X-CSRF-Token'] = csrf_token;
     axios.defaults.baseURL = 'http://localhost:3000/api/';
-    // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
  
     function postCreator(){
         var postCreatorForm = $('.post-creator-form');
@@ -28,24 +29,49 @@ $(document).ready(function() {
             })
             .catch(function(err){
                 console.log(err);
-            })
-            // $.ajax({
-            //     type: "POST",
-            //     beforeSend: function(request) {
-            //       request.setRequestHeader('X-CSRF-Token', csrf_token);
-            //     },
-            //     url: "/api/posts/",
-            //     data: JSON.stringify({data : dataToSend }),
-            //     processData: false,
-            //     success: function(msg) {
-            //       console.log(msg);
-            //     },
-            //     error : function(msg){
-            //         console.log(msg);
-            //     }
-            //   });
-            
+            })  
         })
+    }
+
+    var page = 1;
+    $('#getMorePosts').on('click', function(e){
+        
+        e.preventDefault();
+        axios.get('/posts', { params : {page : page}})
+        .then(function(response){
+            console.log(response);
+            page++;
+            $('.posts-list').loadTemplate($('#post-template'), response.data.posts);
+        })
+        .catch(function(err){
+                console.log(err);
+        })  
+
+    })
+
+
+    function searchPosts(){
+         var searchForm = $('.post-search-form');
+
+         if(searchForm.length == 0){
+            return;
+         }
+
+         searchForm.submit(function(e){
+            console.log('we here');
+            e.preventDefault();
+            var postTitle = searchForm.find('#post-title').val();
+            axios.get('/posts', { params : {search : {postTitle : postTitle}}})
+            .then(function(response){
+                console.log(response);
+               
+                $('.search-posts-results').loadTemplate($('#post-template'), response.data.posts);
+            })
+            .catch(function(err){
+                    console.log(err);
+            })  
+         })
+
     }
 
 
