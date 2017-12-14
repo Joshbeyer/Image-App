@@ -12,8 +12,10 @@ mongoose.connect(dbUrl, function (err, res) {
     console.log('DB Connection success ' + dbUrl);
   }
 });
-module.exports = mongoose;
-
+module.exports = {
+  mongoose,
+  dbUrl
+}
 
 // export a connection object
 // module.exports = db;

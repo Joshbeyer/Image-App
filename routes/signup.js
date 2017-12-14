@@ -13,11 +13,26 @@ router.get('/signup', function (req, res, next) {
 
 
 // process the signup form
+// router.post('/signup', passport.authenticate('local-signup', {
+//   successRedirect: '/user/dashboard', // redirect to the secure profile section
+//   failureRedirect: '/user/signup', // redirect back to the signup page if there is an error
+//   failureFlash: true // allow flash messages
+// }));
+
+// process the signup form
 router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/user/dashboard', // redirect to the secure profile section
   failureRedirect: '/user/signup', // redirect back to the signup page if there is an error
-  failureFlash: true // allow flash messages
-}));
+  failureFlash: true, // allow flash messages
+  passReqToCallback: true // allows us to pass back the entire request to the callback
+}), function (req, res, email, passpord, done) {
+  console.log(req.body);
+  console.log(req.params);
+  res.successRedirect('/user/dashboard'); // redirect to the secure profile section
+});
+
+
+
+
 
 module.exports = router;
 

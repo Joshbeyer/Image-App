@@ -16,6 +16,7 @@
     "debug": "~2.6.9",
     "ejs": "^2.5.7",
     "ejs-layouts": "0.0.1",
+    "email-verification": "^0.4.6",
     "express": "~4.15.5",
     "express-session": "^1.15.6",
     "method-override": "^2.3.10",
