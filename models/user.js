@@ -10,31 +10,12 @@ var userSchema = mongoose.Schema({
   roles: [{ type: 'String' }],
   joinedDate: { type: Date, default: Date.now },
   bio: String,
-  local: {
-    email: String,
-    password: String,
-    passwordResetToken: String,
-    passwordResetExpires: Date,
-    isVerified: { type: Boolean, default: false }
-  },
-  facebook: {
-    id: String,
-    token: String,
-    name: String,
-    email: String
-  },
-  twitter: {
-    id: String,
-    token: String,
-    displayName: String,
-    username: String
-  },
-  google: {
-    id: String,
-    token: String,
-    email: String,
-    name: String
-  }
+  isVerified: { type: Boolean, default: false },
+
+  email: String,
+  password: String,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
 
 });
 
