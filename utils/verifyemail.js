@@ -4,11 +4,9 @@ var User = require('./../models/user'),
 
 mongoose.connect(db.dbUrl);
 
-var crypto = require('crypto');
 var nodemailer = require('nodemailer');
-var crypt = require('./crypt');
 
-var encryptedPassword = '126891c03fef8f5fc1e1d8714d82bb';
+var Promise = require('bluebird');
 
 const transport = nodemailer.createTransport({
   service: 'Gmail',
@@ -16,12 +14,13 @@ const transport = nodemailer.createTransport({
   port: 25,
   auth: {
     user: 'teamdream598@gmail.com',
-    pass: crypt.decrypt(encryptedPassword),
+    pass: 'secretpass',
   },
   tls: {
     rejectUnauthorized: false
   }
 });
+
 
 module.exports = function sendEmail(to, subject, message) {
   const mailOptions = {
