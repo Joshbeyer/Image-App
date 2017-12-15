@@ -43,5 +43,16 @@ module.exports = {
                 }
             });
         })
+    },
+    update : function(id, params){
+        return new Promise(function(resolve, reject){
+            Posts.findByIdAndUpdate(id, params, {new: true}, function(err, post){
+                if(err){
+                    reject(err);
+                } else {
+                    resolve(post);
+                }
+            })
+        })
     }
 }

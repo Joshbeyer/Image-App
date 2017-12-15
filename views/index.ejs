@@ -28,6 +28,7 @@
                           <h4 class="card-title"><%= post.postTitle %></h4>
                           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                           <a href="#" class="btn btn-primary">Go somewhere</a>
+                          <p>id : <%= post._id; %></p>
                         </div>
                     </div>
                   <% }); %>
@@ -43,6 +44,7 @@
                               <h4 class="card-title" data-content="postTitle"></h4>
                               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                               <a href="#" class="btn btn-primary">Go somewhere</a>
+                              <p>id : <span data-content="_id"></span></p>
                             </div>
                         </div>
                     </script>
@@ -101,7 +103,35 @@
       </div>
     </div>
     
+    <div class="row">
+      <div class="col-sm-12">
+          <div class="well">
+              <h3>Update a post</h3>
+              <p>hint : use "5a305804c944771be41329a4"</p>
+          
+              <form action="/" class="post-update-form">
+                  
+                  <input type="hidden" name="_csrf", value="<%= _csrf %>">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="post-title" placeholder="Post Title" name="postTitle">
 
+                  </div>
+                  <div class="form-group">
+                    <input type="text" name="postId" class="form-control" id="postId" placeholder="post id">
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary mt-4">Update post</button>
+                  </div>
+              
+              </form>
+
+              <div class="row update-posts-results">
+                  
+              </div>
+  
+          </div>
+      </div>
+    </div>
 
 
 

@@ -3,6 +3,7 @@ $(document).ready(function() {
     // run functions on init;
     postCreator();
     searchPosts();
+    updatePosts();
 
     // atatch csrf token for requeusts;
     var csrf_token = $('meta[name="_csrf"]').attr('content');
@@ -41,7 +42,7 @@ $(document).ready(function() {
         .then(function(response){
             console.log(response);
             page++;
-            $('.posts-list').loadTemplate($('#post-template'), response.data.posts);
+            $('.posts-list').loadTemplate($('#post-template'), response.data.posts, {append: true});
         })
         .catch(function(err){
                 console.log(err);
@@ -58,9 +59,10 @@ $(document).ready(function() {
          }
 
          searchForm.submit(function(e){
-            console.log('we here');
+      
             e.preventDefault();
             var postTitle = searchForm.find('#post-title').val();
+
             axios.get('/posts', { params : {search : {postTitle : postTitle}}})
             .then(function(response){
                 console.log(response);
@@ -75,6 +77,29 @@ $(document).ready(function() {
     }
 
 
+    function updatePosts(){
+        var updateForm = $('.post-update-form');
 
+        if(updateForm.length == 0){
+            return;
+        }
+
+        updateForm.submit(function(e){
+            
+            e.preventDefault();
+            var postTitle = updateForm.find('#post-title').val();
+            var postId = updateForm.find('#postId').val();
+
+            axios.put('/posts/' + postId, { postTitle : postTitle})
+            .then(function(response){
+                console.log(response);
+               
+                $('.update-posts-results').loadTemplate($('#post-template'), response.data.data);
+            })
+            .catch(function(err){
+                    console.log(err);
+            })  
+        })
+    }
 
 });
