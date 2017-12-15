@@ -10,12 +10,11 @@ var userSchema = mongoose.Schema({
   roles: [{ type: 'String' }],
   joinedDate: { type: Date, default: Date.now },
   bio: String,
-  isVerified: { type: Boolean, default: false },
-
   email: String,
   password: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  isVerified: { type: Boolean, default: false },
 
 });
 
