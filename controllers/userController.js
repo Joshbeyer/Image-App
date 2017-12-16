@@ -3,9 +3,12 @@ var User = require('../models/user');
 
 var passport = require('passport');
 
+
+var mailer = require('./../utils/email');
+
 module.exports = {
-    
-    login : function(params){
+
+    login: function (params) {
         return passport.authenticate('local-login', {
             successRedirect: '/user/dashboard', // redirect to the secure profile section
             failureRedirect: '/user/login', // redirect back to the signup page if there is an error
@@ -13,7 +16,7 @@ module.exports = {
         })
     },
 
-    register : function(params){
+    register: function (params) {
         return passport.authenticate('local-signup', {
             failureRedirect: '/user/signup', // redirect back to the signup page if there is an error
             failureFlash: true, // allow flash messages
@@ -21,13 +24,13 @@ module.exports = {
         });
     },
 
-    getUserById : function(params){
+    getUserById: function (params) {
         // query db for user with ID, remember to filter out password and other sensitive.
     },
 
-    getUserByEmail : function(params){
+    getUserByEmail: function (params) {
         // query db for user with EMAIL, remember to filter out passwword and other sensititve
-    }
-    
+    },
+
 
 }

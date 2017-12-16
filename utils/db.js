@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 
-// Local modules
 var Post = require('../models/post');
 
-
 var dbUrl = 'mongodb://josh:josh@ds163020.mlab.com:63020/imgup';
+
+
 mongoose.connect(dbUrl, function (err, res) {
   if (err) {
     console.log('DB Connection failed : ' + err)

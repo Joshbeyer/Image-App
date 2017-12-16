@@ -1,10 +1,11 @@
 // utils/passport.js
-
+var randToken = require('rand-token');
 // load all the things we need
 var LocalStrategy = require('passport-local').Strategy;
 
 // load up the user model
 var User = require('./../models/user');
+var mailer = require('./email');
 
 // expose this function to our app using module.exports
 module.exports = function (passport) {
@@ -68,12 +69,19 @@ module.exports = function (passport) {
             newUser.bio = '';
             newUser.joinedDate = new Date();
             newUser.password = newUser.generateHash(password);
-
+            verifyToken = randToken.generate(26);
+            newUser.verificationToken = verifyToken;
+            newUser.active = false;
+            console.log('Created Account, Token: ' + verifyToken + ' Created');
             // save the user
             newUser.save(function (err) {
-              if (err)
+              if (err) {
                 throw err;
-              return done(null, newUser);
+              } else {
+                mailer.sendVerification(email, 'Please verify email', 'http://localhost:3000/user/verify?id=' + verifyToken);
+                console.log('Verification email sent from passport.');
+                return done(null, newUser);
+              }
             });
           }
 
@@ -106,8 +114,11 @@ module.exports = function (passport) {
         if (!user.validPassword(password))
           return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
-        if (!user.isVerified)
-          return done(null, false, req.flash('loginMessage', 'Please confirm your email.'));
+        if (!user.active)
+          return done(null, false, req.flash('loginMessage', 'Please confirm your email to activate your account.'));
+
+
+
         // all is well, return successful user
         return done(null, user);
       });
