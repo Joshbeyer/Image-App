@@ -4,7 +4,7 @@ var randToken = require('rand-token');
 var LocalStrategy = require('passport-local').Strategy;
 var userController = require('../controllers').userController;
 
-
+var User = require('../models/user');
 
 
 // expose this function to our app using module.exports
