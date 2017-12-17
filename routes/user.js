@@ -13,6 +13,10 @@ router.all('/', function (req, res) {
 /*    /user/dashboard  */
 router.get('/dashboard', function (req, res, next) {
     if (!req.user) { res.redirect('/user/login'); }
+    if (!req.user.active){
+        res.render('verifyemail');
+        return;
+    }
     // render the page and pass in any flash data if it exists
     res.render('dashboard', {
         user: req.user // get the user out of session and pass to template
@@ -53,15 +57,25 @@ router.post('/signup', userController.register(), function (req, res) {
 /*  /users/verify   */
 router.get('/verify', function (req, res) {
     var token = req.query.id;
-    User.findOne({ 'verificationToken': token }, function (err, user) {
-        if (user.verificationToken == token) {
-            console.log('that token is correct! Verify the user');
-            User.findOneAndUpdate({ 'verificationToken': token }, { 'active': true, verificationToken: '' }, function (err, resp) {
-                console.log('The user has been verified!');
-            });
-        } else { console.log('The token is wrong! Reject the user. token should be: ' + user.verificationToken); }
-    });
-    res.render('emailverified');
+
+    userController.verifyEmail(token)
+    .then(function(user){
+        if(user){
+            req.login(user, function(err){
+                if(err){
+                    throw err;
+                    return
+                }
+                return res.redirect('/user/dashboard');
+            })
+        } else {
+            res.render('emailbadtoken');
+        }
+    })
+    .catch(function(err){
+        res.render('emailbadtoken');
+    })
+   
 });
 
 

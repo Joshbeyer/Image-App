@@ -4,7 +4,7 @@ var User = require('../models/user');
 var passport = require('passport');
 
 
-var mailer = require('./../utils/email');
+var mailer = require('../utils/email');
 
 module.exports = {
 
@@ -24,13 +24,62 @@ module.exports = {
         });
     },
 
-    getUserById: function (params) {
-        // query db for user with ID, remember to filter out password and other sensitive.
+    findUserById: function (id) {
+        return new Promise(function(resolve ,reject){
+            User.findById(id, function(err, user) {
+                if(err){
+                    reeject(err)
+                } else {
+                    resolve(user);
+                }
+            });
+        });
     },
 
-    getUserByEmail: function (params) {
-        // query db for user with EMAIL, remember to filter out passwword and other sensititve
+    findUserByEmail: function (email) {
+        return new Promise(function(resolve, reject){
+            User.findOne({'email': email }, function(err, user){
+                if(err){
+                    reject(err)
+                } else {
+                    resolve(user);
+                }
+            });
+        })
     },
 
+    verifyEmail : function(tokenId){
+        return new Promise(function(resolve, reject){
 
+            User.findOneAndUpdate(
+                { 'verificationToken': tokenId }, 
+                { 'active': true, verificationToken: '' }, 
+            function (err, resp) {
+                if(err){
+                    reject(err)
+                }
+                resolve(resp);
+            });     
+        })
+    },
+
+    sendUserVerificationEmail : function(user){
+        return new Promise(function(resolve, reject){
+         
+            mailer.sendVerification(
+                user.email, 
+                'Please verify email', 
+                'http://localhost:3000/user/verify?id=' + user.verificationToken,
+                function(err, info){
+                    if(err){
+                        reject(err)
+                    } else {
+                        if(info){
+                            resolve(user);
+                        }
+                    }
+                }
+            );
+        })
+    }
 }

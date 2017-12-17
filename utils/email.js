@@ -17,19 +17,13 @@ const transport = nodemailer.createTransport({
 });
 
 module.exports = {
-  sendVerification(to, subject, message) {
+  sendVerification(to, subject, message, cb) {
     const mailOptions = {
       to: to,
       subject: subject,
       text: message,
     };
-    transport.sendMail(mailOptions, (error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(mailOptions)
-      }
-    });
+    transport.sendMail(mailOptions, cb);
   }
 
 }
