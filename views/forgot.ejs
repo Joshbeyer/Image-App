@@ -1,0 +1,33 @@
+<% include ./partials/head %>
+
+  <div class="container">
+
+    <div class="col-sm-6 col-sm-offset-3">
+
+        <h1>Reset Password</h1>
+
+
+
+        <!-- LOGIN FORM -->
+        <form method="post">
+        
+        <input type="hidden" name="_csrf", value="<%= _csrf %>">
+        <div class="form-group">
+            <label for='email'>Email</label>
+            <input type="text" class="form-control" name="email", autofocus>
+        </div>
+        <button type="submit" class="btn btn-warning btn-lg">Reset Password</button>
+        </form>
+
+        <hr>
+
+        <p>Need an account?
+        <a href="/user/signup">Signup</a>
+        </p>
+        <p>Return to
+        <a href="/">login</a>.</p>
+
+        </div>
+
+  </div>
+  <% include ./partials/footer %>
