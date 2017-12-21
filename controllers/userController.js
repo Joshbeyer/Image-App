@@ -7,6 +7,8 @@ var passport = require('passport');
 var mailer = require('../utils/email');
 var randToken = require('rand-token');
 
+
+
 module.exports = {
 
     login: function (params) {
@@ -26,9 +28,9 @@ module.exports = {
     },
 
     findUserById: function (id) {
-        return new Promise(function(resolve ,reject){
-            User.findById(id, function(err, user) {
-                if(err){
+        return new Promise(function (resolve, reject) {
+            User.findById(id, function (err, user) {
+                if (err) {
                     reeject(err)
                 } else {
                     resolve(user);
@@ -38,9 +40,11 @@ module.exports = {
     },
 
     findUserByEmail: function (email) {
-        return new Promise(function(resolve, reject){
-            User.findOne({'email': email }, function(err, user){
-                if(err){
+        return new Promise(function (resolve, reject) {
+            User.findOne({
+                'email': email
+            }, function (err, user) {
+                if (err) {
                     reject(err)
                 } else {
                     resolve(user);
@@ -49,33 +53,36 @@ module.exports = {
         })
     },
 
-    verifyEmail : function(tokenId){
-        return new Promise(function(resolve, reject){
+    verifyEmail: function (tokenId) {
+        return new Promise(function (resolve, reject) {
 
-            User.findOneAndUpdate(
-                { 'verificationToken': tokenId }, 
-                { 'active': true, verificationToken: '' }, 
-            function (err, resp) {
-                if(err){
-                    reject(err)
-                }
-                resolve(resp);
-            });     
+            User.findOneAndUpdate({
+                    'verificationToken': tokenId
+                }, {
+                    'active': true,
+                    verificationToken: ''
+                },
+                function (err, resp) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(resp);
+                });
         })
     },
 
-    sendUserVerificationEmail : function(user){
-        return new Promise(function(resolve, reject){
-         
+    sendUserVerificationEmail: function (user) {
+        return new Promise(function (resolve, reject) {
+
             mailer.sendVerification(
-                user.email, 
-                'Please verify email', 
+                user.email,
+                'Please verify email',
                 'http://localhost:3000/user/verify?id=' + user.verificationToken,
-                function(err, info){
-                    if(err){
+                function (err, info) {
+                    if (err) {
                         reject(err)
                     } else {
-                        if(info){
+                        if (info) {
                             resolve(user);
                         }
                     }
@@ -85,22 +92,54 @@ module.exports = {
     },
 
 
-    sendResetPassEmail : function(email){
-        return new Promise(function(resolve, reject){
+    sendResetPassEmail: function (email) {
+        return new Promise(function (resolve, reject) {
             var token = randToken.generate(26);
-            User.findOneAndUpdate(
-                {'email': email},
-                {'verificationToken': token},
-            function(err,resp){
-                if(err){
-                    reject(err)
-                }resolve(resp);
-            })
+            User.findOneAndUpdate({
+                    'email': email
+                }, {
+                    'verificationToken': token
+                },
+                function (err, resp) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(resp);
+                })
+            // Need to add Flash message here('Please check your email')
             return mailer.sendVerification(
-                email,
-                'Requested Password Reset',
-                'http://localhost:3000/user/reset/' + token), function(req, res){
-                };
+                    email,
+                    'Requested Password Reset',
+                    'http://localhost:3000/user/reset/' + token),
+                function (req, res) {};
         })
     },
+
+
+    resetPassword: function (req, res, token, password) {
+        User.findOne({
+            verificationToken: token
+        }, function (err, user) {
+            if (!user) {
+                // .flash needs added
+                // req.flash('error', 'Password reset token is invalid or has expired.');
+                console.log('no user found for reset');
+                return res.redirect('back');
+            }
+
+            user.password = password;
+            user.verificationToken = '';
+
+            user.save(function (err) {
+                req.login(user, function (err) {
+                    if (err) {
+                        throw err;
+                        return
+                    }
+                    return res.redirect('/user/dashboard');
+                })
+            })
+        })
+    }
+
 }

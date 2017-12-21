@@ -95,6 +95,10 @@ router.get('/verify', function (req, res) {
         })
 
 });
+
+
+
+/*  /users/forgot   */
 router.get('/forgot', function (req, res) {
     res.render('forgot', {
         user: req.user
@@ -103,9 +107,13 @@ router.get('/forgot', function (req, res) {
 
 router.post('/forgot', function (req, res, next) {
     userController.sendResetPassEmail(req.body.email);
+    res.render('resetsent');
 });
 
 
+
+
+/*  /users/reset   */
 router.get('/reset/:token', function (req, res) {
     User.findOne({
             verificationToken: req.params.token
@@ -121,31 +129,9 @@ router.get('/reset/:token', function (req, res) {
         });
 });
 
+
 router.post('/reset/:token', function (req, res, done) {
-    console.log('User Token: ' + req.params.token + ' ' + 'User Password: ' + req.body.password);
-    User.findOne({
-        verificationToken: req.params.token
-    }, function (err, user) {
-        if (!user) {
-            req.flash('error', 'Password reset token is invalid or has expired.');
-            console.log('no user found for reset');
-            return res.redirect('back');
-        }
-
-        user.password = req.body.password;
-        user.verificationToken = '';
-
-        user.save(function (err) {
-            req.login(user, function (err) {
-                if (err) {
-                    throw err;
-                    return
-                }
-                return res.redirect('/user/dashboard');
-            })
-        })
-        // res.redirect('/user/login'), {message: req.flash('success', 'Success! Your password has been changed.')};
-    })
+    userController.resetPassword(req, res, req.params.token, req.body.password);
 
 });
 
